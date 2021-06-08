@@ -1,38 +1,10 @@
 import styled from "styled-components";
 
-const Login = () => {
-  return (
-    <Container>
-      <Nav>
-        <a href="/">
-          <img src="/images/login-logo.svg" alt="" />
-        </a>
-        <div>
-          <Join>Join now</Join>
-          <Signin>Sign in</Signin>
-        </div>
-      </Nav>
-      <Section>
-        <Hero>
-          <h1>Welcome to your professional community</h1>
-          <img src="/images/login-hero.svg" alt="" />
-        </Hero>
-        <Form>
-          <Google>
-            <img src="/images/google.svg" alt="" />
-            Sign in with google
-          </Google>
-        </Form>
-      </Section>
-    </Container>
-  );
-};
-
-const Container = styled.div`
+export const Container = styled.div`
   padding: 0px;
 `;
 
-const Section = styled.section`
+export const Section = styled.section`
   display: flex;
   position: relative;
   margin: auto;
@@ -49,7 +21,7 @@ const Section = styled.section`
   }
 `;
 
-const Form = styled.div`
+export const Form = styled.div`
   margin-top: 100px;
   width: 400px;
   z-index: 1;
@@ -59,7 +31,7 @@ const Form = styled.div`
   }
 `;
 
-const Google = styled.button`
+export const Google = styled.button`
   display: flex;
   background-color: #fff;
   align-items: center;
@@ -77,7 +49,7 @@ const Google = styled.button`
   }
 `;
 
-const Hero = styled.div`
+export const Hero = styled.div`
   width: 100%;
   h1 {
     width: 55%;
@@ -111,7 +83,7 @@ const Hero = styled.div`
   }
 `;
 
-const Nav = styled.nav`
+export const Nav = styled.nav`
   display: flex;
   position: relative;
   max-width: 1128px;
@@ -130,7 +102,7 @@ const Nav = styled.nav`
   }
 `;
 
-const Join = styled.a`
+export const Join = styled.a`
   font-size: 16px;
   padding: 10px 12px;
   border: 0;
@@ -146,7 +118,7 @@ const Join = styled.a`
   }
 `;
 
-const Signin = styled.a`
+export const Signin = styled.a`
   font-size: 16px;
   font-weight: 600;
   line-height: 40px;
@@ -159,5 +131,3 @@ const Signin = styled.a`
     background-color: rgba(112, 181, 249, 0.15);
   }
 `;
-
-export default Login;
