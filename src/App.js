@@ -1,20 +1,25 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Landing from "./scenes/Landing/Landing";
-import Home from "./scenes/Home/Home";
+import Signup from "./scenes/Sign/Signup/Signup";
+import Login from "./scenes/Sign/Login/Login";
+import SplashScreen from "./scenes/SplashScreen";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
+          <Route exact path="/signup">
+            <Signup />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
           <Route exact path="/">
-            <Landing />
+            <SplashScreen />
           </Route>
-          <Route exact path="/home">
-            <Header />
-            <Home />
-          </Route>
+          {/* <Route exact path="/home">
+            
+          </Route> */}
         </Switch>
       </Router>
     </div>
