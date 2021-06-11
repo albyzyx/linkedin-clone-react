@@ -1,23 +1,24 @@
 import styled from "styled-components";
-
+import { useState } from "react";
 const Post = () => {
+  const [showMore, setShowMore] = useState(false);
   return (
     <Container>
       <Content>
         <PostHeader>
           <UserImage>
-            <img src="/images/albyDP.jpg" alt="" />
+            <img src="/images/amazon.jpeg" alt="" />
           </UserImage>
           <UserInfo>
-            <span>Albin Arun</span>
-            <span>SDE at Amazon</span>
+            <span>Amazon</span>
+            <span>16M followers</span>
             <span>3h</span>
           </UserInfo>
           <Ellipsis>
             <img src="/images/ellipsis.svg" alt="" />
           </Ellipsis>
         </PostHeader>
-        <PostContent>
+        <PostContent showMore={showMore}>
           <p>
             Learn the business secrets of one of the world's most high-tech
             beehives! Thanks to #AWS machine learning, Kim and Tom Erik are
@@ -25,7 +26,9 @@ const Post = () => {
             like never before. 🐝 #Developer #IoT #MachineLearning
             https://go.aws/3v7NwsG
           </p>
-          <span>...see more</span>
+          <span onClick={() => setShowMore(!showMore)}>
+            {showMore ? "show less" : "...see more"}
+          </span>
         </PostContent>
         <PostMedia>
           <img src="/images/aws.jpg" alt="" />
@@ -132,8 +135,8 @@ const PostContent = styled.div`
   color: rgba(0, 0, 0, 0.94);
   position: relative;
   overflow: hidden;
-  height: 54px;
-  /* height: 100%; */
+  /* height: 54px; */
+  height: ${(props) => (props && props.showMore ? "100%" : "54px")};
   span {
     position: absolute;
     right: 12px;

@@ -1,12 +1,17 @@
 import styled from "styled-components";
 
-const AddPostCarousel = () => {
+const AddPostCarousel = (props) => {
   return (
     <Container>
       <AddPost>
         <AddPostSection>
           <UserImage>
-            <img src="/images/albyDP.jpg" alt="" />
+            <img
+              src={
+                props.user.photoURL ? props.user.photoURL : "/images/user.svg"
+              }
+              alt=""
+            />
           </UserImage>
           <NewPostText>Start a post</NewPostText>
         </AddPostSection>

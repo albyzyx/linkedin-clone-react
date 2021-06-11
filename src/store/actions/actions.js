@@ -1,22 +1,28 @@
-import { auth, provider } from "../../firebase";
-import { EMAIL_ALREADY_EXIST } from "../errors";
-import { SET_ERROR, SET_USER } from "./actionType";
+import { auth, provider, storage, db } from "../../firebase";
+import { SET_USER } from "./actionType";
 
 const setUser = (payload) => ({
   type: SET_USER,
   user: payload,
 });
 
-const setError = (payload) => ({
-  type: SET_ERROR,
-  error: payload,
-});
-
 export function getUserAuthAPI() {
   return (dispatch) => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        dispatch(setUser(user));
+        let tmpUser = { ...user };
+        getBioAPI(user.uid)
+          .then((data) => {
+            if (data) {
+              tmpUser = {
+                ...user,
+                bio: data.bio,
+                designation: data.designation,
+              };
+            }
+            dispatch(setUser(tmpUser));
+          })
+          .catch(() => {});
       }
     });
   };
@@ -30,15 +36,43 @@ export function createUserWithEmailAndPasswordAPI(email, password) {
         dispatch(setUser(payload.user));
       })
       .catch((error) => {
-        console.log(error);
         if (error.code === "auth/email-already-in-use") {
-          dispatch(setError(EMAIL_ALREADY_EXIST));
+          alert("The entered email already exist");
         }
       });
   };
 }
 
-export function signInWithEmailAPI(email, password) {}
+export function signInWithEmailAPI(email, password) {
+  return (dispatch) => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((payload) => {
+        let tmpUser = { ...payload.user };
+        getBioAPI(payload.user.uid)
+          .then((data) => {
+            if (data) {
+              tmpUser = {
+                ...tmpUser,
+                bio: data.bio,
+                designation: data.designation,
+              };
+            }
+            dispatch(setUser(tmpUser));
+          })
+          .catch(() => {});
+      })
+      .catch((error) => {
+        if (error.code === "auth/user-not-found") {
+          alert(
+            "An account with the email address does not exist, try creating an account."
+          );
+        } else {
+          alert("Invalid Credentials");
+        }
+      });
+  };
+}
 
 export function signInWithGoogleAPI() {
   return (dispatch) => {
@@ -64,4 +98,57 @@ export function signOutAPI() {
         console.log(error);
       });
   };
+}
+
+export function uploadUserImageAPI(file, uid) {
+  return (dispatch) => {
+    storage
+      .ref()
+      .child(`user-image/${uid}.jpeg`)
+      .putString(file, "data_url")
+      .then((snapshot) => {
+        snapshot.ref.getDownloadURL().then((url) => {
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              console.log(url);
+              user.updateProfile({ photoURL: url });
+            }
+          });
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+}
+
+export function setMetaAPI(uid, name, bio, designation) {
+  return (dispatch) => {
+    console.log(name, bio, designation);
+    db.collection("user-bio")
+      .doc(uid)
+      .set({ bio: bio, designation: designation });
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        user.updateProfile({ displayName: name });
+        console.log("dispached", {
+          ...user,
+          bio: bio,
+          designation: designation,
+        });
+        dispatch(setUser({ ...user, bio: bio, designation: designation }));
+      }
+    });
+  };
+}
+
+function getBioAPI(uid) {
+  return new Promise((resolve) => {
+    db.collection("user-bio")
+      .doc(uid)
+      .get()
+      .then((doc) => {
+        resolve(doc.data());
+      });
+  });
 }

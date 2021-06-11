@@ -1,20 +1,23 @@
 import styled from "styled-components";
 
-const ProfileCarousel = () => {
+const ProfileCarousel = (props) => {
   return (
     <Container>
       <Content>
         <Profile>
           <ProfileBackground>
             <UserImage>
-              <img src="/images/albyDP.jpg" alt="" />
+              <img
+                src={
+                  props.user.photoURL ? props.user.photoURL : "/images/user.svg"
+                }
+                alt=""
+              />
             </UserImage>
           </ProfileBackground>
           <UserInfo>
-            <UserName>Albin Arun</UserName>
-            <UserBio>
-              Full Stack Developer | CS Engineer | Ai/Ml Afficionado
-            </UserBio>
+            <UserName>{props.user.displayName}</UserName>
+            <UserBio>{props.user.bio}</UserBio>
           </UserInfo>
         </Profile>
         <Connection>

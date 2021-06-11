@@ -59,6 +59,10 @@ const Content = styled.div`
       color: #0a66c2;
       font-weight: 600;
       margin-top: 12px;
+      cursor: pointer;
+      :hover {
+        text-decoration: underline;
+      }
       img {
         margin-left: 6px;
       }
@@ -83,6 +87,10 @@ const Follow = styled.div`
       border: 1px solid rgba(0, 0, 0, 0.6);
       padding: 6px 12px;
       border-radius: 24px;
+      cursor: pointer;
+      :hover {
+        background-color: rgba(0, 0, 0, 0.08);
+      }
     }
   }
 `;

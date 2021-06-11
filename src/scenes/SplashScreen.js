@@ -1,17 +1,26 @@
-import React from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
 import Header from "../components/Header/Header";
 import { getUserAuthAPI } from "../store/actions/actions";
 import Home from "./Home/Home";
+import IntroPage from "./IntroPage";
 import Landing from "./Landing/Landing";
 
 const SplashScreen = (props) => {
-  props.getUserAuth();
+  useEffect(() => {
+    props.getUserAuth();
+  }, []);
   return props.user ? (
-    <div>
-      <Header />
-      <Home />
-    </div>
+    <>
+      {props.user.displayName && props.user.bio && props.user.designation ? (
+        <>
+          <Header photoURL={props.user.photoURL} />
+          <Home />
+        </>
+      ) : (
+        <IntroPage />
+      )}
+    </>
   ) : (
     <Landing />
   );

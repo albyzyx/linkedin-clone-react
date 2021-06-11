@@ -1,10 +1,10 @@
 import AddPostCarousel from "./AddPostCarousel/AddPostCarousel";
 import Post from "./PostCarousel/Post";
 
-const FeedCarousel = () => {
+const FeedCarousel = (props) => {
   return (
     <div>
-      <AddPostCarousel />
+      <AddPostCarousel user={props.user} />
       <Post />
     </div>
   );

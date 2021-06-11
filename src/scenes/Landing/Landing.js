@@ -12,10 +12,13 @@ import {
 } from "./style";
 import styled from "styled-components";
 
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { useState } from "react";
-import { signInWithGoogleAPI } from "../../store/actions/actions";
+import {
+  signInWithEmailAPI,
+  signInWithGoogleAPI,
+} from "../../store/actions/actions";
 
 const mapStateToProps = (state) => {
   return {};
@@ -25,6 +28,9 @@ const mapDispatchToProps = (dispatch) => ({
   signInWithGoogle: () => {
     dispatch(signInWithGoogleAPI());
   },
+  signInWithEmail: (email, password) => {
+    dispatch(signInWithEmailAPI(email, password));
+  },
 });
 
 const Landing = (props) => {
@@ -33,11 +39,26 @@ const Landing = (props) => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+
+  if (props.user) {
+    return <Redirect to="/" />;
+  }
   const signIn = (email, password) => {
+    setEmailError(false);
+    setPasswordError(false);
+    const pattern = new RegExp(
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+    );
     if (password.length < 6) {
       setPasswordError(true);
     }
-    setEmailError(true);
+    if (email === "" || !pattern.test(email)) {
+      setEmailError(true);
+    }
+    if (password.length < 6 || email === "" || !pattern.test(email)) {
+      return;
+    }
+    props.signInWithEmail(email, password);
   };
   return (
     <Container>
@@ -67,6 +88,7 @@ const Landing = (props) => {
               value={email}
               placeholder="Email or Phone number"
               onChange={(e) => {
+                setEmailError(false);
                 setEmail(e.target.value);
               }}
             />
@@ -77,6 +99,7 @@ const Landing = (props) => {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               onChange={(e) => {
+                setPasswordError(false);
                 setPassword(e.target.value);
               }}
             />
@@ -133,6 +156,7 @@ const EmailInput = styled.div`
     pointer-events: none;
   }
 `;
+
 const PasswordInput = styled(EmailInput)`
   margin-top: 12px;
   button {

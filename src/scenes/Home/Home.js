@@ -3,6 +3,15 @@ import FeedCarousel from "./components/FeedCarousel";
 import LatestCarousel from "./components/LatestCarousel";
 import { Container, Content, Section, Layout } from "./style";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+const mapStateToProps = (state) => {
+  return {
+    user: state.userState.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
 const Home = (props) => {
   return (
     <Container>
@@ -14,13 +23,13 @@ const Home = (props) => {
           <p>Find talented pros in record time</p>
         </Section>
         <Layout>
-          <ProfileCarousel />
-          <FeedCarousel />
-          <LatestCarousel />
+          <ProfileCarousel user={props.user} />
+          <FeedCarousel user={props.user} />
+          <LatestCarousel user={props.user} />
         </Layout>
       </Content>
     </Container>
   );
 };
 
-export default Home;
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

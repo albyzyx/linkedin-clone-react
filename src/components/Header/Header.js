@@ -68,7 +68,10 @@ const Header = (props) => {
               </NavItem>
               <User onClick={() => props.signOut()}>
                 <a>
-                  <img src="/images/user.svg" alt="" />
+                  <img
+                    src={props.photoURL ? props.photoURL : "/images/user.svg"}
+                    alt=""
+                  />
                   <span>
                     Me
                     <img src="/images/down-icon.svg" alt="" />
